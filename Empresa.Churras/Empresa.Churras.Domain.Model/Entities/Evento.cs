@@ -6,7 +6,7 @@ using System.Collections.Generic;
 
 namespace Empresa.Churras.Domain.Model.Entities
 {
-    public class Evento : EntityKeySeq
+    public class Evento : EntityKeySeq, IAggregateRoot
     {
         public Colega DonoDaCasa { get; set; }
         public long DonoDaCasaKey { get; set; }
@@ -30,7 +30,6 @@ namespace Empresa.Churras.Domain.Model.Entities
 
             ColegasConfirmados.Add(confirmacao);
         }
-
         public void CancelarPresenca(Colega colega)
         {
             if (ColegasConfirmados == null) 
