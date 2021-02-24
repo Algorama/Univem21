@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <ClassDiagram MajorVersion="1" MinorVersion="1">
   <Class Name="Empresa.Churras.Domain.Model.Entities.Colega">
-    <Position X="1.25" Y="1.75" Width="1.5" />
+    <Position X="1.25" Y="1.5" Width="1.75" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAEAA=</HashCode>
       <FileName>Entities\Colega.cs</FileName>
@@ -11,13 +11,20 @@
     </ShowAsAssociation>
   </Class>
   <Class Name="Empresa.Churras.Domain.Model.Entities.Evento">
-    <Position X="4.25" Y="1.75" Width="2.25" />
+    <Position X="4.25" Y="1" Width="2.25" />
+    <AssociationLine Name="Tipo" Type="Empresa.Churras.Domain.Model.Enums.TipoEvento" FixedFromPoint="true">
+      <Path>
+        <Point X="6.5" Y="1.438" />
+        <Point X="9" Y="1.438" />
+      </Path>
+    </AssociationLine>
     <TypeIdentifier>
-      <HashCode>AAAAQAACAAAAAAAgAAAAAAAAAAAAAAAAAAIAAEEAAAQ=</HashCode>
+      <HashCode>AAAAQAACAgAAAAAgAABAAAAAAAAAAAAAAAIAAEEAAAQ=</HashCode>
       <FileName>Entities\Evento.cs</FileName>
     </TypeIdentifier>
     <ShowAsAssociation>
       <Property Name="DonoDaCasa" />
+      <Property Name="Tipo" />
       <Property Name="Periodo" />
     </ShowAsAssociation>
     <ShowAsCollectionAssociation>
@@ -25,9 +32,9 @@
     </ShowAsCollectionAssociation>
   </Class>
   <Class Name="Empresa.Churras.Domain.Model.Entities.EventoColegaConfirmado">
-    <Position X="8.25" Y="1.75" Width="2" />
+    <Position X="4.25" Y="4.25" Width="2.25" />
     <TypeIdentifier>
-      <HashCode>AAAEAAAAAAAIAAAAAAAAAAAAAAAAAAAAAACAAAAAAAA=</HashCode>
+      <HashCode>AAAEAAAAAAAIAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Entities\Evento.cs</FileName>
     </TypeIdentifier>
   </Class>
@@ -40,11 +47,18 @@
     </TypeIdentifier>
   </Class>
   <Class Name="Empresa.Churras.Domain.Model.ValueObjects.Periodo">
-    <Position X="4.75" Y="4.25" Width="1.75" />
+    <Position X="7.5" Y="4.25" Width="2.25" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAACAAAAAAAAAAAAAAAAAAAAAAIAAAAA=</HashCode>
+      <HashCode>AAAAAAAAAAAAAACAAAAAAAAAAIAAAAAABAAAAIAAAAA=</HashCode>
       <FileName>ValueObjects\Periodo.cs</FileName>
     </TypeIdentifier>
   </Class>
+  <Enum Name="Empresa.Churras.Domain.Model.Enums.TipoEvento">
+    <Position X="9" Y="1.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAQAAAAABAAAAAAAAAAAAAkAAAAAAAAAAAA=</HashCode>
+      <FileName>Enums\TipoEvento.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
   <Font Name="Segoe UI" Size="9" />
 </ClassDiagram>
