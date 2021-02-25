@@ -21,7 +21,17 @@ namespace Kernel.Infra
         public static Container Container { get; set; }
         public static AppSettings AppSettings { get; set; }
 
-        public static void InitializeContainer()
+        public static void Start<TDbContext>(Context context = Context.IntegratedTest) where TDbContext : DbContext
+        {
+            InitializeContainer();
+
+            if (Container.IsLocked) return;
+
+            RegisterCommonDependencies(context);
+            RegisterRepository<TDbContext>();                
+        }
+
+        private static void InitializeContainer()
         {
             if (Container == null)
             {
@@ -31,22 +41,15 @@ namespace Kernel.Infra
             }
         }
 
-        public static void Start<TDbContext>(Context context = Context.IntegratedTest) where TDbContext : DbContext
+        private static void RegisterCommonDependencies(Context context)
         {
-            InitializeContainer();
+            var environment = "Development";
 
-            if (Container.IsLocked) return;
+            if (context == Context.Staging)
+                environment = "Staging";
+            else if (context == Context.Production)
+                environment = "Production";
 
-            RegisterCommonDependencies();
-
-            if (context == Context.UnitTest)
-                RegisterMockDependencies();
-            else
-                RegisterInfraDependencies<TDbContext>();
-        }
-
-        public static void RegisterCommonDependencies(string environment = "Development")
-        {
             var builder = new ConfigurationBuilder()
                 .SetBasePath(Directory.GetCurrentDirectory())
                 .AddJsonFile($"appsettings.{environment}.json");
@@ -65,14 +68,7 @@ namespace Kernel.Infra
             Container.Register<IBlobStorage, AzureBlobStorage>();
         }
 
-        public static void RegisterMockDependencies()
-        {
-            //Container.Register<ISessionHelper, MockSessionHelper>();
-            //Container.Register(typeof(IDocumentRepository<>),
-            //    typeof(MockDocumentRepository<>));
-        }
-
-        public static void RegisterInfraDependencies<TDbContext>() where TDbContext : DbContext
+        private static void RegisterRepository<TDbContext>() where TDbContext : DbContext
         {
             Container.Register<DbContext, TDbContext>();
             Container.Register<ISessionFactory, SessionFactory>();

@@ -1,8 +1,8 @@
-﻿using Kernel.Domain.Model.Entities;
+﻿using Kernel.Domain.Model.Enums;
 using Kernel.Domain.Model.Settings;
 using Microsoft.EntityFrameworkCore;
 
-namespace Algorama.Kernel.Infra.Repositories
+namespace Kernel.Infra.Repositories
 {
     public class KernelContext : DbContext
     {
@@ -15,18 +15,24 @@ namespace Algorama.Kernel.Infra.Repositories
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseCosmos(
-               AppSettings.NoSqlDbSettings.AccountEndpoint,
-               AppSettings.NoSqlDbSettings.AccountKey,
-               AppSettings.NoSqlDbSettings.DatabaseName,
-               options => {}
-             );
+            if (AppSettings.Context == Context.UnitTest)
+            {
+                optionsBuilder.UseInMemoryDatabase(AppSettings.NoSqlDbSettings.DatabaseName);
+            }
+            else
+            {
+                optionsBuilder.UseCosmos(
+                   AppSettings.NoSqlDbSettings.AccountEndpoint,
+                   AppSettings.NoSqlDbSettings.AccountKey,
+                   AppSettings.NoSqlDbSettings.DatabaseName,
+                   options => { }
+                 );
+            }
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.HasDefaultContainer("Kernel");
-            modelBuilder.Entity<Sequence>().ToContainer("Kernel").HasPartitionKey(x => x.Discriminator);
+            modelBuilder.ApplyConfigurationsFromAssembly(typeof(KernelContext).Assembly);
         }
     }
 }
