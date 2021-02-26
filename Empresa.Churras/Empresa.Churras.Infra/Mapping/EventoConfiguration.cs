@@ -12,6 +12,7 @@ namespace Empresa.Churras.Infra.Mapping
             builder.HasPartitionKey(x => x.Discriminator);
             builder.HasOne(x => x.DonoDaCasa).WithMany();
             builder.OwnsOne(x => x.Periodo);
+            builder.OwnsMany(x => x.ColegasConfirmados);
         }
     }
 }

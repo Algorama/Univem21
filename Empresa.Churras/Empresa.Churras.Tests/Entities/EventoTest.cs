@@ -2,7 +2,7 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Linq;
 
-namespace Empresa.Churras.Tests
+namespace Empresa.Churras.Tests.Entities
 {
     [TestClass]
     public class EventoTest

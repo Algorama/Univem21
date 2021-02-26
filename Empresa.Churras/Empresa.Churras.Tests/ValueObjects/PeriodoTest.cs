@@ -2,7 +2,7 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 
-namespace Empresa.Churras.Tests
+namespace Empresa.Churras.Tests.ValueObjects
 {
     [TestClass]
     public class PeriodoTest

@@ -5,6 +5,7 @@ namespace Kernel.Infra.Repositories
 {
     public class SessionFactory : ISessionFactory
     {
-        public ISessionRepository OpenSession() => new SessionRepository(IoC.Get<DbContext>());
+        public ISessionRepository OpenSession() => 
+            new SessionRepository(IoC.Get<DbContext>());
     }
 }
