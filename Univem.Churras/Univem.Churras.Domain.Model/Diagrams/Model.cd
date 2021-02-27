@@ -1,0 +1,64 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="Univem.Churras.Domain.Model.Entities.Evento">
+    <Position X="3.25" Y="1" Width="2" />
+    <AssociationLine Name="Tipo" Type="Univem.Churras.Domain.Model.Enums.TipoEvento" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="4.688" Y="2.617" />
+        <Point X="4.688" Y="3.925" />
+        <Point X="7.25" Y="3.925" />
+      </Path>
+    </AssociationLine>
+    <TypeIdentifier>
+      <HashCode>AAAAQAACAAAAAAAgAAAAAAAAAAAAAAAAAAIAAEEAAAQ=</HashCode>
+      <FileName>Entities\Evento.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="DonoDaCasa" />
+      <Property Name="Periodo" />
+      <Property Name="Tipo" />
+    </ShowAsAssociation>
+    <ShowAsCollectionAssociation>
+      <Property Name="ColegasConfirmados" />
+    </ShowAsCollectionAssociation>
+  </Class>
+  <Class Name="Univem.Churras.Domain.Model.Entities.Colega">
+    <Position X="0.5" Y="1.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAEAA=</HashCode>
+      <FileName>Entities\Colega.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="Endereco" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="Univem.Churras.Domain.Model.Entities.EventoColegaConfirmado">
+    <Position X="7" Y="1" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAAEAAAAAAAIAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Entities\Evento.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Univem.Churras.Domain.Model.ValueObjects.Periodo">
+    <Position X="3.25" Y="4.5" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAACAAAAAAAAAAAAAAAAAAAAAAIAAAAA=</HashCode>
+      <FileName>ValueObjects\Periodo.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Univem.Churras.Domain.Model.ValueObjects.Endereco">
+    <Position X="0.5" Y="3.5" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAABAAAAAAAAgACAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>ValueObjects\Endereco.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Enum Name="Univem.Churras.Domain.Model.Enums.TipoEvento">
+    <Position X="7.25" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAQAAAAABAAAAAAAAAAAAAkAAAAAAAAAAAA=</HashCode>
+      <FileName>Enums\TipoEvento.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>
