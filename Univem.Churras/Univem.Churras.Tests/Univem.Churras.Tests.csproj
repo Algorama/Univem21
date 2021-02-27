@@ -20,4 +20,10 @@
     <ProjectReference Include="..\Univem.Churras.Infra\Univem.Churras.Infra.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="appSettings.Development.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>
