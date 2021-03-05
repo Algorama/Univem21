@@ -19,7 +19,7 @@ namespace Kernel.Infra.Repositories
         }
 
         public IQueryable<T> Query => DbSet.AsQueryable<T>();
-        public async Task<T> Get(object id) => await DbSet.FindAsync(id);
+        public async Task<T> Get(object key) => await DbSet.FindAsync(key);
         public async Task<T> Get(Expression<Func<T, bool>> where) => await DbSet.Where(where).FirstOrDefaultAsync();
         public async Task<IList<T>> List() => await DbSet.ToListAsync();
         public async Task<IList<T>> List(Expression<Func<T, bool>> where) => await DbSet.Where(where).ToListAsync();
