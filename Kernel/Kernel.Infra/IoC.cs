@@ -1,10 +1,12 @@
 ﻿using Kernel.Domain.Model.Enums;
 using Kernel.Domain.Model.Helpers;
+using Kernel.Domain.Model.Providers;
 using Kernel.Domain.Model.Settings;
 using Kernel.Domain.Repositories;
 using Kernel.Domain.Services;
 using Kernel.Infra.Email;
 using Kernel.Infra.Jwt;
+using Kernel.Infra.Mock;
 using Kernel.Infra.Repositories;
 using Kernel.Infra.Storage;
 using Microsoft.EntityFrameworkCore;
@@ -28,7 +30,7 @@ namespace Kernel.Infra
             if (Container.IsLocked) return;
 
             RegisterCommonDependencies(context);
-            RegisterRepository<TDbContext>();                
+            RegisterRepository<TDbContext>();
         }
 
         private static void InitializeContainer()
@@ -66,6 +68,9 @@ namespace Kernel.Infra
             Container.Register<ITokenHelper, JwtTokenHelper>();
             Container.Register<IEmailService, EmailService>();
             Container.Register<IBlobStorage, AzureBlobStorage>();
+
+            if(context == Context.IntegratedTest || context == Context.UnitTest)
+                Container.Register<IUserProvider, MockUserProvider>();
         }
 
         private static void RegisterRepository<TDbContext>() where TDbContext : DbContext
