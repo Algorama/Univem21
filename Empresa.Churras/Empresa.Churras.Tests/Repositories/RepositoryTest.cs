@@ -42,7 +42,7 @@ namespace Empresa.Churras.Tests.Repositories
 
                 var tiao = new Colega
                 {
-                    Key = 1,
+                    Key = 100001,
                     Nome = "Joca",
                     Endereco = new Endereco
                     {
@@ -68,7 +68,7 @@ namespace Empresa.Churras.Tests.Repositories
 
                 var pardinho = new Colega
                 {
-                    Key = 2,
+                    Key = 200002,
                     Nome = "Pardinho",
                     Endereco = new Endereco
                     {
@@ -82,7 +82,7 @@ namespace Empresa.Churras.Tests.Repositories
 
                 var tiao = new Colega
                 {
-                    Key = 3,
+                    Key = 300003,
                     Nome = "Tião",
                     Endereco = new Endereco
                     {
@@ -95,7 +95,7 @@ namespace Empresa.Churras.Tests.Repositories
 
                 var evento = new Evento
                 {
-                    Key = 1,
+                    Key = 100001,
                     DonoDaCasa = pardinho,
                     Tipo = TipoEvento.Churras,
                     Nome = "Churras na Chácara do Pardinho",

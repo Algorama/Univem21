@@ -1,4 +1,5 @@
 ﻿using Empresa.Churras.Domain.Model.Entities;
+using Empresa.Churras.Domain.Model.ValueObjects;
 using Empresa.Churras.Domain.Services;
 using FluentAssertions;
 using Kernel.Domain.Model.Validation;
@@ -14,14 +15,26 @@ namespace Empresa.Churras.Tests.Services
     {
         private static ColegaService _service;
 
+        private static Colega _colega1;
+        private static Colega _colega2;
+        private static Colega _colega3;
+
         [ClassInitialize]
-        public static void Setup(TestContext context)
+        public static async Task Setup(TestContext context)
         {
             _service = IoC.Get<ColegaService>();
+
+            _colega1 = new Colega { Nome = "Colega 001", Endereco = new Endereco { Descricao = "Endereco 001" } };
+            _colega2 = new Colega { Nome = "Colega 002", Endereco = new Endereco { Descricao = "Endereco 002" } };
+            _colega3 = new Colega { Nome = "Colega 003", Endereco = new Endereco { Descricao = "Endereco 003" } };
+
+            await _service.Insert(_colega1);
+            await _service.Insert(_colega2);
+            await _service.Insert(_colega3);
         }
 
         [TestMethod]
-        public async Task Insert_Validatio_Required_Test()
+        public async Task Validation_Required_Test()
         {
             try
             {
@@ -30,7 +43,7 @@ namespace Empresa.Churras.Tests.Services
 
                 Assert.Fail();
             }
-            catch(ValidatorException ex)
+            catch (ValidatorException ex)
             {
                 ex.Errors.Count.Should().Be(2);
 
@@ -40,6 +53,91 @@ namespace Empresa.Churras.Tests.Services
                 foreach (var error in ex.Errors)
                     Console.WriteLine(error.Message);
             }
+        }
+
+        [TestMethod]
+        public async Task Validation_StringLength_Test()
+        {
+            try
+            {
+                var colega = new Colega
+                {
+                    Nome = "01234567890123456789012345678901234567890123456789X",
+                    Endereco = new Endereco
+                    {
+                        Descricao = "Teste 123"
+                    }
+                };
+                await _service.Insert(colega);
+
+                Assert.Fail();
+            }
+            catch (ValidatorException ex)
+            {
+                ex.Errors.Count.Should().Be(1);
+
+                ex.Errors.Should().Contain(x => x.Message == "Tamanho máximo do nome é 50 caracteres");
+
+                foreach (var error in ex.Errors)
+                    Console.WriteLine(error.Message);
+            }
+        }
+
+        [TestMethod]
+        public async Task Insert_Test()
+        {
+            var colega = new Colega
+            {
+                Nome = "Tião",
+                Endereco = new Endereco
+                {
+                    Descricao = "Sítio do Tião"
+                }
+            };
+
+            await _service.Insert(colega);
+
+            colega.Key.Should().BeGreaterThan(0);            
+            Console.WriteLine(colega);
+        }
+
+        [TestMethod]
+        public async Task Update_Test()
+        {
+            _colega1.Nome = "ALTERADO";
+
+            await _service.Update(_colega1);
+
+            var fromDb = await _service.Get(_colega1.Key);
+            fromDb.Nome.Should().Be("ALTERADO");
+
+            Console.WriteLine(fromDb);
+        }
+
+        [TestMethod]
+        public async Task Delete_Test()
+        {
+            await _service.Delete(_colega2);
+
+            var fromDb = await _service.Get(_colega2.Key);
+            fromDb.Should().BeNull();
+        }
+
+        [TestMethod]
+        public async Task Get_Test()
+        {
+            var fromDb = await _service.Get(_colega3.Key);
+            fromDb.Should().NotBeNull();
+            Console.WriteLine(fromDb);
+        }
+
+        [TestMethod]
+        public async Task List_Test()
+        {
+            var fromDb = await _service.List();
+            fromDb.Count.Should().BeGreaterThan(1);
+            foreach(var x in fromDb)
+                Console.WriteLine(x);
         }
     }
 }

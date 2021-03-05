@@ -1,15 +1,10 @@
 ﻿using Empresa.Churras.Domain.Model.Entities;
 using Empresa.Churras.Domain.Model.Enums;
 using Empresa.Churras.Domain.Model.ValueObjects;
-using Empresa.Churras.Infra;
-using Kernel.Domain.Model.Settings;
 using Kernel.Domain.Repositories;
 using Kernel.Infra;
-using Kernel.Infra.Repositories;
-using Microsoft.Extensions.Configuration;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
-using System.IO;
 using System.Threading.Tasks;
 
 namespace Empresa.Churras.Tests.Repositories
@@ -33,7 +28,7 @@ namespace Empresa.Churras.Tests.Repositories
 
                 var tiao = new Colega
                 {
-                    Key = 1,
+                    Key = 100001,
                     Nome = "Joca",
                     Endereco = new Endereco
                     {
@@ -59,7 +54,7 @@ namespace Empresa.Churras.Tests.Repositories
 
                 var pardinho = new Colega
                 {
-                    Key = 2,
+                    Key = 200002,
                     Nome = "Pardinho",
                     Endereco = new Endereco
                     {
@@ -73,7 +68,7 @@ namespace Empresa.Churras.Tests.Repositories
 
                 var tiao = new Colega
                 {
-                    Key = 3,
+                    Key = 300003,
                     Nome = "Tião",
                     Endereco = new Endereco
                     {
@@ -86,7 +81,7 @@ namespace Empresa.Churras.Tests.Repositories
 
                 var evento = new Evento
                 {
-                    Key = 1,
+                    Key = 100001,
                     DonoDaCasa = pardinho,
                     Tipo = TipoEvento.Churras,
                     Nome = "Churras na Chácara do Pardinho",
