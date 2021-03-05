@@ -9,7 +9,6 @@ namespace Empresa.Churras.Domain.Model.Entities
 {
     public class Evento : EntityKeySeq, IAggregateRoot
     {
-        [Required(ErrorMessage = "Dono da Casa é Obrigatório!")]
         public Colega DonoDaCasa { get; set; }
         public long DonoDaCasaKey { get; set; }
 
@@ -42,6 +41,8 @@ namespace Empresa.Churras.Domain.Model.Entities
 
             ColegasConfirmados.RemoveAll(x => x.ColegaKey == colega.Key);
         }
+
+        public override string ToString() => $"#{Key}: - {Nome} na casa do {DonoDaCasa?.Nome} - {Dia:dd/MM/yyyy}";
     }
 
     public class EventoColegaConfirmado

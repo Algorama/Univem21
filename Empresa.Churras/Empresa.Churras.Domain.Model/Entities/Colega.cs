@@ -17,5 +17,7 @@ namespace Empresa.Churras.Domain.Model.Entities
         {
             Endereco = new Endereco();
         }
+
+        public override string ToString() => $"#{Key} - {Nome}";
     }
 }

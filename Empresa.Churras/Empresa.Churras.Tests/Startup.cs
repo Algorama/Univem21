@@ -1,4 +1,7 @@
-﻿using Empresa.Churras.Infra;
+﻿using Empresa.Churras.Domain.Model.Entities;
+using Empresa.Churras.Domain.Model.ValueObjects;
+using Empresa.Churras.Domain.Services;
+using Empresa.Churras.Infra;
 using Kernel.Domain.Model.Settings;
 using Kernel.Infra;
 using Microsoft.Extensions.Configuration;
@@ -25,8 +28,17 @@ namespace Empresa.Churras.Tests
                 dbContext.Database.EnsureDeleted();
                 dbContext.Database.EnsureCreated();
             }
-            
-            await Task.CompletedTask;
+
+            var colegaService = IoC.Get<ColegaService>();
+            var colegaLogado = new Colega
+            {
+                Nome = "Colega de Teste",
+                Endereco = new Endereco
+                {
+                    Descricao = "Endereço de Teste"
+                }
+            };
+            await colegaService.Insert(colegaLogado);
         }
     }
 }
