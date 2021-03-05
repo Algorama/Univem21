@@ -21,30 +21,38 @@ namespace Kernel.Domain.Services
             if (key == null)
                 return new T();
 
-            using var session = SessionFactory.OpenSession();
-            var repo = session.GetQueryRepository<T>();
-            return await repo.Get(key);
+            using (var session = SessionFactory.OpenSession())
+            {
+                var repo = session.GetQueryRepository<T>();
+                return await repo.Get(key);
+            }
         }
 
         public virtual async Task<T> Get(Expression<Func<T, bool>> @where)
         {
-            using var session = SessionFactory.OpenSession();
-            var repo = session.GetQueryRepository<T>();
-            return await repo.Get(where);
+            using (var session = SessionFactory.OpenSession())
+            {
+                var repo = session.GetQueryRepository<T>();
+                return await repo.Get(where);
+            }
         }
 
         public virtual async Task<IList<T>> List()
         {
-            using var session = SessionFactory.OpenSession();
-            var repo = session.GetQueryRepository<T>();
-            return await repo.List();
+            using (var session = SessionFactory.OpenSession())
+            {
+                var repo = session.GetQueryRepository<T>();
+                return await repo.List();
+            }
         }
 
         public virtual async Task<IList<T>> List(Expression<Func<T, bool>> @where)
         {
-            using var session = SessionFactory.OpenSession();
-            var repo = session.GetQueryRepository<T>();
-            return await repo.List(where);
+            using (var session = SessionFactory.OpenSession())
+            {
+                var repo = session.GetQueryRepository<T>();
+                return await repo.List(where);
+            }
         }
     }
 }
