@@ -51,10 +51,7 @@ namespace Kernel.Domain.Validation
             }
         }
 
-        protected virtual async Task AnnotationsValidations(ValidatorResult result, T entity)
-        {
-            await Task.Run(() => result.ValidateAnnotations(entity));
-        }
+        protected virtual void AnnotationsValidations(ValidatorResult result, T entity) => result.ValidateAnnotations(entity);
 
         protected virtual async Task DefaultValidations(ValidatorResult result, T entity, string userName)
         {
@@ -64,7 +61,9 @@ namespace Kernel.Domain.Validation
             if (entity is ITrackable && string.IsNullOrWhiteSpace(userName))
                 result.AddError("userName é Obrigatório!");
 
-            await AnnotationsValidations(result, entity);
+            AnnotationsValidations(result, entity);
+
+            await Task.CompletedTask;
         }
 
         protected virtual async Task InsertValidations(ValidatorResult result, T entity, string userName)

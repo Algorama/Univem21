@@ -37,59 +37,68 @@ namespace Kernel.Domain.Services
         public virtual async Task Insert(T entity)
         {
             var token = await GetToken();
-            await Validator.Validate(entity, ValidationType.Insert, token.Email);
+            await Validate(entity, ValidationType.Insert, token.Email);
 
-            using var session = SessionFactory.OpenSession();
-            var repo = session.GetRepository<T>();
+            using (var session = SessionFactory.OpenSession())
+            {
+                var repo = session.GetRepository<T>();
 
-            if (entity is ITrackable trackeableEntity)
-                trackeableEntity.TrackableInfo = new TrackableInfo(token.Email);
+                if (entity is ITrackable trackeableEntity)
+                    trackeableEntity.TrackableInfo = new TrackableInfo(token.Email);
 
-            if (entity is IActivable activableEntity)
-                activableEntity.ActiveInfo = new ActiveInfo();
+                if (entity is IActivable activableEntity)
+                    activableEntity.ActiveInfo = new ActiveInfo();
 
-            if (entity is EntityKeySeq entityKeySeq)
-                entityKeySeq.Key = await GetNextSequence(session);
+                if (entity is EntityKeySeq entityKeySeq)
+                    entityKeySeq.Key = await GetNextSequence(session);
 
-            await repo.Insert(entity);
-            session.SaveChanges();
+                await repo.Insert(entity);
+                session.SaveChanges();
+            }
         }
 
         public virtual async Task Update(T entity)
         {
             var token = await GetToken();
-            await Validator.Validate(entity, ValidationType.Update, token.Email);
+            await Validate(entity, ValidationType.Update, token.Email);
 
-            using var session = SessionFactory.OpenSession();
-            var repo = session.GetRepository<T>();
+            using (var session = SessionFactory.OpenSession())
+            {
+                var repo = session.GetRepository<T>();
 
-            if (entity is ITrackable trackeableEntity)
-                trackeableEntity.TrackableInfo.Changed(token.Email);
+                if (entity is ITrackable trackeableEntity)
+                    trackeableEntity.TrackableInfo.Changed(token.Email);
 
-            repo.Update(entity);
-            session.SaveChanges();
+                repo.Update(entity);
+                session.SaveChanges();
+            }
         }
 
         public virtual async Task Delete(T entity)
         {
             var token = await GetToken();
-            var result = await Validator.Validate(entity, ValidationType.Delete, token.Email);
 
-            using var session = SessionFactory.OpenSession();
-            var repo = session.GetRepository<T>();
-
-            if (entity is IActivable activableEntity && !result.HasWarnings)
+            using (var session = SessionFactory.OpenSession())
             {
-                activableEntity.ActiveInfo.Deactivate();
-                repo.Update(entity);
+                var repo = session.GetRepository<T>();
+
+                if (entity is IActivable activableEntity && activableEntity.ActiveInfo.Active)
+                {
+                    activableEntity.ActiveInfo.Deactivate();
+
+                    if (entity is ITrackable trackeableEntity)
+                        trackeableEntity.TrackableInfo.Changed(token.Email);
+
+                    repo.Update(entity);
+                }
+                else
+                {
+                    await Validate(entity, ValidationType.Delete, token.Email);
+                    repo.Delete(entity);
+                }
+
+                session.SaveChanges();
             }
-            else
-                repo.Delete(entity);
-
-            if (entity is ITrackable trackeableEntity)
-                trackeableEntity.TrackableInfo.Changed(token.Email);
-
-            session.SaveChanges();
         }
 
         protected async Task<long> GetNextSequence(ISessionRepository session)
