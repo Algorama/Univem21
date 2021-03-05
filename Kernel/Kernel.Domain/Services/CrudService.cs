@@ -37,7 +37,7 @@ namespace Kernel.Domain.Services
         public virtual async Task Insert(T entity)
         {
             var token = await GetToken();
-            await Validator.Validate(entity, ValidationType.Insert, token.Email);
+            await Validate(entity, ValidationType.Insert, token.Email);
 
             using (var session = SessionFactory.OpenSession())
             {
@@ -60,7 +60,7 @@ namespace Kernel.Domain.Services
         public virtual async Task Update(T entity)
         {
             var token = await GetToken();
-            await Validator.Validate(entity, ValidationType.Update, token.Email);
+            await Validate(entity, ValidationType.Update, token.Email);
 
             using (var session = SessionFactory.OpenSession())
             {
@@ -77,7 +77,6 @@ namespace Kernel.Domain.Services
         public virtual async Task Delete(T entity)
         {
             var token = await GetToken();
-            var result = await Validator.Validate(entity, ValidationType.Delete, token.Email);
 
             using (var session = SessionFactory.OpenSession())
             {

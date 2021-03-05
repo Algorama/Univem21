@@ -3,13 +3,18 @@ using Empresa.Churras.Domain.Model.ValueObjects;
 using Kernel.Domain.Model.Entities;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace Empresa.Churras.Domain.Model.Entities
 {
     public class Evento : EntityKeySeq, IAggregateRoot
     {
+        [Required(ErrorMessage = "Dono da Casa é Obrigatório!")]
         public Colega DonoDaCasa { get; set; }
         public long DonoDaCasaKey { get; set; }
+
+        [Required(ErrorMessage = "É necessário dar um Nome ao Evento")]
+        [StringLength(100, ErrorMessage = "Nome do Evento deve ter no máximo 100 caracteres")]
         public string Nome { get; set; }
         public TipoEvento Tipo { get; set; }
         public DateTime Dia { get; set; }
