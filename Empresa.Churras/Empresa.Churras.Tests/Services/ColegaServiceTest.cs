@@ -41,7 +41,7 @@ namespace Empresa.Churras.Tests.Services
                 var colega = new Colega();
                 await _service.Insert(colega);
 
-                Assert.Fail();
+                Assert.Fail("Deixou Incluir um Colega sem Nome e/ou sem Endereço!");
             }
             catch (ValidatorException ex)
             {
@@ -70,7 +70,7 @@ namespace Empresa.Churras.Tests.Services
                 };
                 await _service.Insert(colega);
 
-                Assert.Fail();
+                Assert.Fail("Deixou incluir um Colega com nome maior que 50 chars");
             }
             catch (ValidatorException ex)
             {
