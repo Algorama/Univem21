@@ -1,6 +1,7 @@
 ﻿using Empresa.Churras.Domain.Model.Enums;
 using Empresa.Churras.Domain.Model.ValueObjects;
 using Kernel.Domain.Model.Entities;
+using Kernel.Domain.Model.Validation;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -21,22 +22,31 @@ namespace Empresa.Churras.Domain.Model.Entities
 
         public List<EventoColegaConfirmado> ColegasConfirmados { get; set; }
 
-        public void ConfirmarPresenca(Colega colega)
+        public Evento()
         {
+            ColegasConfirmados = new List<EventoColegaConfirmado>();
+        }
+
+        public void ConfirmarPresenca(Colega colega, string vaiLevar)
+        {
+            if (string.IsNullOrWhiteSpace(vaiLevar))
+                throw new ValidatorException("Você precisa informar o que vai Levar");
+
             if (ColegasConfirmados == null)
                 ColegasConfirmados = new List<EventoColegaConfirmado>();
 
             var confirmacao = new EventoColegaConfirmado
             {
                 ColegaKey = colega.Key,
-                ColegaNome = colega.Nome
+                ColegaNome = colega.Nome,
+                VaiLevar = vaiLevar
             };
 
             ColegasConfirmados.Add(confirmacao);
         }
         public void CancelarPresenca(Colega colega)
         {
-            if (ColegasConfirmados == null) 
+            if (ColegasConfirmados == null)
                 return;
 
             ColegasConfirmados.RemoveAll(x => x.ColegaKey == colega.Key);
@@ -50,5 +60,7 @@ namespace Empresa.Churras.Domain.Model.Entities
         public long ColegaKey { get; set; }
         public string ColegaNome { get; set; }
         public string VaiLevar { get; set; }
+
+        public override string ToString() => $"Colega: #{ColegaKey}: {ColegaNome} confirmou e vai levar: {VaiLevar}";
     }
 }

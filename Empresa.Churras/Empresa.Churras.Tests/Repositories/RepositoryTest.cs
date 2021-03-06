@@ -107,8 +107,8 @@ namespace Empresa.Churras.Tests.Repositories
                     }
                 };
 
-                evento.ConfirmarPresenca(pardinho);
-                evento.ConfirmarPresenca(tiao);
+                evento.ConfirmarPresenca(pardinho,"teste");
+                evento.ConfirmarPresenca(tiao,"teste");
 
                 await repoEvento.Insert(evento);
 

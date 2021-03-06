@@ -64,13 +64,18 @@ namespace Kernel.Infra
             var factory = new LoggerFactory();
             Container.RegisterInstance<ILoggerFactory>(factory);
             Container.RegisterSingleton(typeof(ILogger<>), typeof(Logger<>));
-
-            Container.Register<ITokenHelper, JwtTokenHelper>();
-            Container.Register<IEmailService, EmailService>();
+            Container.Register<ITokenHelper, JwtTokenHelper>();            
             Container.Register<IBlobStorage, AzureBlobStorage>();
 
-            if(context == Context.IntegratedTest || context == Context.UnitTest)
+            if (context == Context.IntegratedTest || context == Context.UnitTest)
+            {
                 Container.Register<IUserProvider, MockUserProvider>();
+                Container.Register<IEmailService, MockEmailService>();
+            }
+            else
+            {
+                Container.Register<IEmailService, EmailService>();
+            }
         }
 
         private static void RegisterRepository<TDbContext>() where TDbContext : DbContext

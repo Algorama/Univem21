@@ -18,7 +18,7 @@ namespace Empresa.Churras.Tests.Entities
 
             var evento = new Evento { Nome = "Churras na casa do Ary" };
 
-            evento.ConfirmarPresenca(colega);
+            evento.ConfirmarPresenca(colega, "teste");
 
             var confirmacao = evento.ColegasConfirmados.FirstOrDefault();
             Assert.AreEqual(colega.Nome, confirmacao.ColegaNome);
@@ -35,7 +35,7 @@ namespace Empresa.Churras.Tests.Entities
 
             var evento = new Evento { Nome = "Churras na casa do Ary" };
 
-            evento.ConfirmarPresenca(colega);
+            evento.ConfirmarPresenca(colega, "teste");
             evento.CancelarPresenca(colega);
 
             Assert.AreEqual(0, evento.ColegasConfirmados.Count);

@@ -8,6 +8,7 @@ using Kernel.Domain.Model.Validation;
 using Kernel.Infra;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
+using System.IO;
 using System.Threading.Tasks;
 
 namespace Empresa.Churras.Tests.Services
@@ -137,6 +138,7 @@ namespace Empresa.Churras.Tests.Services
         [TestMethod]
         public async Task Update_Test()
         {
+            Console.WriteLine(_evento1);
             _evento1.Nome = "ALTERADO";
 
             await _service.Update(_evento1);
@@ -173,6 +175,32 @@ namespace Empresa.Churras.Tests.Services
 
             foreach(var x in fromDb)
                 Console.WriteLine(x);
+        }
+
+        [TestMethod]
+        public async Task ConfirmarPresenca_Test()
+        {
+            await _service.ConfirmarPresenca(_evento3.Key, "Cerveja e Picanha");
+
+            var fromDb = await _service.Get(_evento3.Key);
+
+            fromDb.ColegasConfirmados.Count.Should().Be(1);
+
+            foreach(var confirmacao in fromDb.ColegasConfirmados)
+                Console.WriteLine(confirmacao);
+        }
+
+        [TestMethod]
+        public async Task CancelarPresenca_Test()
+        {
+            var novoEvento = GetFakeEvento("Novo Evento", DateTime.Today.AddDays(3));
+            await _service.Insert(novoEvento);
+            await _service.ConfirmarPresenca(novoEvento.Key, "fome");
+            await _service.CancelarPresenca(novoEvento.Key);
+
+            var fromDb = await _service.Get(novoEvento.Key);
+
+            fromDb.ColegasConfirmados.Count.Should().Be(0);
         }
 
         private static Evento GetFakeEvento(string name = "Churras da Firma", DateTime? dia = null)
