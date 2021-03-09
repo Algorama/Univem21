@@ -64,8 +64,10 @@ namespace Kernel.Infra
             var factory = new LoggerFactory();
             Container.RegisterInstance<ILoggerFactory>(factory);
             Container.RegisterSingleton(typeof(ILogger<>), typeof(Logger<>));
-            Container.Register<ITokenHelper, JwtTokenHelper>();            
-            Container.Register<IBlobStorage, AzureBlobStorage>();
+            Container.Register<ITokenHelper, JwtTokenHelper>();
+
+            if(!string.IsNullOrWhiteSpace(AppSettings.StorageSettings.ConnectionString))
+                Container.Register<IBlobStorage, AzureBlobStorage>();
 
             if (context == Context.IntegratedTest || context == Context.UnitTest)
             {
@@ -80,7 +82,7 @@ namespace Kernel.Infra
 
         private static void RegisterRepository<TDbContext>() where TDbContext : DbContext
         {
-            Container.Register<DbContext, TDbContext>();
+            Container.Register<DbContext, TDbContext>(Lifestyle.Scoped);
             Container.Register<ISessionFactory, SessionFactory>();
         }
 
