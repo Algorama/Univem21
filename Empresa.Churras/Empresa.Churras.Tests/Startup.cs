@@ -19,6 +19,7 @@ namespace Empresa.Churras.Tests
         public static async Task Initialize(TestContext context)
         {
             IoC.Start<ChurrasContext>();
+            IoC.Container.Verify();
 
             var settings = IoC.Get<AppSettings>();
             var dbContext = IoC.Get<ChurrasContext>();
