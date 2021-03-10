@@ -2,7 +2,6 @@ using Empresa.Churras.Infra;
 using Kernel.Infra;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using SimpleInjector;
@@ -11,18 +10,11 @@ namespace Empresa.Churras.Api
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration)
-        {
-            Configuration = configuration;
-        }
-
-        public IConfiguration Configuration { get; }
-
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
 
-            IoC.Container = new Container();
+            IoC.InitializeContainer();
 
             // https://simpleinjector.readthedocs.io/en/latest/aspnetintegration.html
             services.AddSimpleInjector(IoC.Container, options =>
@@ -30,7 +22,6 @@ namespace Empresa.Churras.Api
                 options.AddAspNetCore()
                        .AddControllerActivation();
             });
-
             IoC.Start<ChurrasContext>();
         }
 

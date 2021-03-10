@@ -33,7 +33,7 @@ namespace Kernel.Infra
             RegisterRepository<TDbContext>();
         }
 
-        private static void InitializeContainer()
+        public static void InitializeContainer()
         {
             if (Container == null)
             {
