@@ -82,7 +82,7 @@ namespace Kernel.Infra
 
         private static void RegisterRepository<TDbContext>() where TDbContext : DbContext
         {
-            Container.Register<DbContext, TDbContext>(Lifestyle.Scoped);
+            Container.Register<DbContext, TDbContext>();
             Container.Register<ISessionFactory, SessionFactory>();
         }
 
