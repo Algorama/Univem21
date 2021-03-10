@@ -6,6 +6,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using SimpleInjector;
 using Microsoft.OpenApi.Models;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Empresa.Churras.Api
 {
@@ -32,6 +33,11 @@ namespace Empresa.Churras.Api
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Churras API", Version = "v1" });
+            });
+
+            services.Configure<ApiBehaviorOptions>(options =>
+            {
+                options.SuppressModelStateInvalidFilter = true;
             });
         }
 

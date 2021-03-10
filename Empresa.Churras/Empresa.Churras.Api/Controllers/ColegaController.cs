@@ -37,11 +37,11 @@ namespace Empresa.Churras.Api.Controllers
             }
             catch (ValidatorException ex)
             {
-                return BadRequest(ex);
+                return BadRequest(ex.Errors);
             }
             catch (Exception ex)
             {
-                return StatusCode(500, ex);
+                return StatusCode(500, ex.ToString());
             }
         }
 
@@ -62,11 +62,11 @@ namespace Empresa.Churras.Api.Controllers
             }
             catch (ValidatorException ex)
             {
-                return BadRequest(ex);
+                return BadRequest(ex.Errors);
             }
             catch (Exception ex)
             {
-                return StatusCode(500, ex);
+                return StatusCode(500, ex.ToString());
             }
         }
 
@@ -85,11 +85,11 @@ namespace Empresa.Churras.Api.Controllers
             }
             catch (ValidatorException ex)
             {
-                return BadRequest(ex);
+                return BadRequest(ex.Errors);
             }
             catch (Exception ex)
             {
-                return StatusCode(500, ex);
+                return StatusCode(500, ex.ToString());
             }
         }
 
@@ -107,11 +107,11 @@ namespace Empresa.Churras.Api.Controllers
             }
             catch (ValidatorException ex)
             {
-                return BadRequest(ex);
+                return BadRequest(ex.Errors);
             }
             catch (Exception ex)
             {
-                return StatusCode(500, ex);
+                return StatusCode(500, ex.ToString());
             }
         }
     }
