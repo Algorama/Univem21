@@ -33,7 +33,7 @@ namespace Kernel.Infra
             RegisterRepository<TDbContext>();
         }
 
-        public static void InitializeContainer()
+        private static void InitializeContainer()
         {
             if (Container == null)
             {
@@ -64,25 +64,18 @@ namespace Kernel.Infra
             var factory = new LoggerFactory();
             Container.RegisterInstance<ILoggerFactory>(factory);
             Container.RegisterSingleton(typeof(ILogger<>), typeof(Logger<>));
+
             Container.Register<ITokenHelper, JwtTokenHelper>();
+            Container.Register<IEmailService, EmailService>();
+            Container.Register<IBlobStorage, AzureBlobStorage>();
 
-            if(!string.IsNullOrWhiteSpace(AppSettings.StorageSettings.ConnectionString))
-                Container.Register<IBlobStorage, AzureBlobStorage>();
-
-            if (context == Context.IntegratedTest || context == Context.UnitTest)
-            {
+            if(context == Context.IntegratedTest || context == Context.UnitTest)
                 Container.Register<IUserProvider, MockUserProvider>();
-                Container.Register<IEmailService, MockEmailService>();
-            }
-            else
-            {
-                Container.Register<IEmailService, EmailService>();
-            }
         }
 
         private static void RegisterRepository<TDbContext>() where TDbContext : DbContext
         {
-            Container.Register<DbContext, TDbContext>(Lifestyle.Scoped);
+            Container.Register<DbContext, TDbContext>();
             Container.Register<ISessionFactory, SessionFactory>();
         }
 

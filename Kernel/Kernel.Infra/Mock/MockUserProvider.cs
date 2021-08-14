@@ -11,9 +11,9 @@ namespace Kernel.Infra.Mock
         {
             var token = new Token
             {
-                Key = 1, // Representa o Colega Logado
                 Email = "user@test.com.br",
-                Name = "Test User"
+                Name = "Test User",
+                Key = 1
             };
 
             return await Task.FromResult(token);

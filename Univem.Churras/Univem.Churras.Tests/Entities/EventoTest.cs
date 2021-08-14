@@ -2,7 +2,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Linq;
 using Univem.Churras.Domain.Model.Entities;
 
-namespace Univem.Churras.Tests
+namespace Univem.Churras.Tests.Entities
 {
     [TestClass]
     public class EventoTest

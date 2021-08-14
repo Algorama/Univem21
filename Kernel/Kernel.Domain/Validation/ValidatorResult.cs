@@ -21,19 +21,6 @@ namespace Kernel.Domain.Validation
             Warnings = new List<ValidatorMessage>();
         }
 
-        public void AddFieldError(string errorMessage, string fieldName)
-        {
-            if (Errors == null)
-                Errors = new List<ValidatorMessage>();
-
-            Errors.Add(new ValidatorMessage
-            {
-                Key = fieldName,
-                Message = errorMessage,
-                MessageType = ValidatorMessageType.Error
-            });
-        }
-
         public void AddError(string errorMessage, string fieldName = null)
         {
             if (Errors == null)
@@ -44,19 +31,6 @@ namespace Kernel.Domain.Validation
                 Key = fieldName,
                 Message = errorMessage,
                 MessageType = ValidatorMessageType.Error
-            });
-        }
-
-        public void AddFieldWarning(string warningMessage, string fieldName)
-        {
-            if (Warnings == null)
-                Warnings = new List<ValidatorMessage>();
-
-            Warnings.Add(new ValidatorMessage
-            {
-                Key = fieldName,
-                Message = warningMessage,
-                MessageType = ValidatorMessageType.Warning
             });
         }
 
