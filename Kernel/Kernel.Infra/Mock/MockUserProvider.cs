@@ -11,7 +11,7 @@ namespace Kernel.Infra.Mock
         {
             var token = new Token
             {
-                Email = "user@tes.com.br",
+                Email = "user@test.com.br",
                 Name = "Test User"
             };
 

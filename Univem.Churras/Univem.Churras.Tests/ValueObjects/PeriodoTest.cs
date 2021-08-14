@@ -2,7 +2,7 @@
 using System;
 using Univem.Churras.Domain.Model.ValueObjects;
 
-namespace Univem.Churras.Tests
+namespace Univem.Churras.Tests.ValueObjects
 {
     [TestClass]
     public class PeriodoTest

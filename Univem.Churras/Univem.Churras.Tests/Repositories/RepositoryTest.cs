@@ -1,19 +1,17 @@
 ﻿using Kernel.Domain.Model.Settings;
+using Kernel.Domain.Repositories;
 using Kernel.Infra.Repositories;
 using Microsoft.Extensions.Configuration;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Univem.Churras.Domain.Model.Entities;
 using Univem.Churras.Domain.Model.Enums;
 using Univem.Churras.Domain.Model.ValueObjects;
 using Univem.Churras.Infra;
 
-namespace Univem.Churras.Tests
+namespace Univem.Churras.Tests.Repositories
 {
     [TestClass]
     public class RepositoryTest
@@ -64,7 +62,7 @@ namespace Univem.Churras.Tests
         [TestMethod]
         public async Task Insert_Evento_Test()
         {
-            using (var session = new SessionRepository(_context))
+            using (ISessionRepository session = new SessionRepository(_context))
             {
                 var repoColega = session.GetRepository<Colega>();
                 var repoEvento = session.GetRepository<Evento>();
