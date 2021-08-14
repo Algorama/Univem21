@@ -20,6 +20,12 @@ namespace Univem.Churras.Domain.Model.Entities
         public TipoEvento Tipo { get; set; }
         public List<EventoColegaConfirmado> ColegasConfirmados { get; set; }
 
+        public Evento()
+        {
+            Periodo = new Periodo();
+            ColegasConfirmados = new List<EventoColegaConfirmado>();
+        }
+
         public void ConfirmarPresenca(Colega colega, string vaiLevar = null)
         {
             if (ColegasConfirmados == null)
