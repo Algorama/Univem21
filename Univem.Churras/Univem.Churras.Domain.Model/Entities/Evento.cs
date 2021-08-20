@@ -22,6 +22,7 @@ namespace Univem.Churras.Domain.Model.Entities
 
         public Evento()
         {
+            DonoDaCasa = new Colega();
             Periodo = new Periodo();
             ColegasConfirmados = new List<EventoColegaConfirmado>();
         }

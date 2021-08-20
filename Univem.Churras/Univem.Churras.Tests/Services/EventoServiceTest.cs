@@ -164,7 +164,14 @@ namespace Univem.Churras.Tests.Services
         [TestMethod]
         public async Task List_Eventos_Futuros_Test()
         {
-            var fromDb = await _service.List(x => x.Dia > DateTime.Today);
+            // Existe um Bug no EFCore 5, que lança exception se usar a seguinte expression:
+            //      x => x.Dia > DateTime.Today
+            // A explicação do problema está aqui: https://github.com/dotnet/efcore/issues/18589
+            // Foi corrigido para a versão 6
+            var today = DateTime.Today;
+            var fromDb = await _service.List(x => x.Dia > today);
+            //
+
             fromDb.Count.Should().BeGreaterThan(1);
             foreach (var x in fromDb)
                 Console.WriteLine(x);
