@@ -1,13 +1,14 @@
 using Kernel.Infra;
+using Univem.Churras.Infra;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.OpenApi.Models;
 using SimpleInjector;
-using Univem.Churras.Infra;
+using Microsoft.OpenApi.Models;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
+using Univem.Churras.Api.Swagger;
 
 namespace Univem.Churras.Api
 {
@@ -22,6 +23,11 @@ namespace Univem.Churras.Api
 
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddCors(x => x.AddPolicy("AllowAll", builder =>
+            {
+                builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
+            }));
+
             services.AddControllers();
 
             #region Injeção de Dependência
@@ -41,6 +47,7 @@ namespace Univem.Churras.Api
             services.AddSwaggerGen(x =>
             {
                 x.SwaggerDoc("v1", new OpenApiInfo { Title = "Churras API", Version = "v1" });
+                x.OperationFilter<AddTokenHeaderParameter>();
             });
 
             #endregion
@@ -62,6 +69,7 @@ namespace Univem.Churras.Api
 
             app.UseHttpsRedirection();
             app.UseRouting();
+            app.UseCors("AllowAll");
 
             app.UseEndpoints(endpoints =>
             {

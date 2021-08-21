@@ -6,6 +6,7 @@
 
   <ItemGroup>
     <PackageReference Include="SimpleInjector.Integration.AspNetCore.Mvc" Version="5.3.0" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.1.5" />
   </ItemGroup>
 
   <ItemGroup>

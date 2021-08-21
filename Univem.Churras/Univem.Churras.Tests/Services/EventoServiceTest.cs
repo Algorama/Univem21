@@ -32,9 +32,9 @@ namespace Univem.Churras.Tests.Services
             _service = IoC.Get<EventoService>();
             _userProvider = IoC.Get<IUserProvider>();
 
-            _colega1 = new Colega { Nome = "Colega 001", Endereco = new Endereco { Descricao = "Endereço 001" } };
-            _colega2 = new Colega { Nome = "Colega 002", Endereco = new Endereco { Descricao = "Endereço 002" } };
-            _colega3 = new Colega { Nome = "Colega 003", Endereco = new Endereco { Descricao = "Endereço 003" } };
+            _colega1 = new Colega { Nome = "Colega 001", Email = "colega1", Senha = "123", Endereco = new Endereco { Descricao = "Endereço 001" } };
+            _colega2 = new Colega { Nome = "Colega 002", Email = "colega2", Senha = "123", Endereco = new Endereco { Descricao = "Endereço 002" } };
+            _colega3 = new Colega { Nome = "Colega 003", Email = "colega3", Senha = "123", Endereco = new Endereco { Descricao = "Endereço 003" } };
 
             var colegaService = IoC.Get<ColegaService>();
 

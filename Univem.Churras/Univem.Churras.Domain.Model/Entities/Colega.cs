@@ -13,6 +13,12 @@ namespace Univem.Churras.Domain.Model.Entities
         [Required(ErrorMessage = "Endereço é Obrigatório!")]
         public Endereco Endereco { get; set; }
 
+        [Required(ErrorMessage = "E-Mail do Colega é Obrigatório!")]
+        public string Email { get; set; }
+
+        [Required(ErrorMessage = "Senha é Obrigatória!")]
+        public string Senha { get; set; }
+
         public Colega()
         {
             Endereco = new Endereco();

@@ -1,4 +1,6 @@
 ﻿using FluentAssertions;
+using Kernel.Domain.Model.Dtos;
+using Kernel.Domain.Model.Helpers;
 using Kernel.Domain.Model.Validation;
 using Kernel.Infra;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -24,9 +26,9 @@ namespace Univem.Churras.Tests.Services
         {
             _service = IoC.Get<ColegaService>();
 
-            _colega1 = new Colega { Nome = "Colega 001", Endereco = new Endereco { Descricao = "Endereço 001" } };
-            _colega2 = new Colega { Nome = "Colega 002", Endereco = new Endereco { Descricao = "Endereço 002" } };
-            _colega3 = new Colega { Nome = "Colega 003", Endereco = new Endereco { Descricao = "Endereço 003" } };
+            _colega1 = new Colega { Nome = "Colega 001", Email = "colega1", Senha = "123", Endereco = new Endereco { Descricao = "Endereço 001" } };
+            _colega2 = new Colega { Nome = "Colega 002", Email = "colega2", Senha = "123", Endereco = new Endereco { Descricao = "Endereço 002" } };
+            _colega3 = new Colega { Nome = "Colega 003", Email = "colega3", Senha = "123", Endereco = new Endereco { Descricao = "Endereço 003" } };
 
             await _service.Insert(_colega1);
             await _service.Insert(_colega2);
@@ -45,10 +47,12 @@ namespace Univem.Churras.Tests.Services
             }
             catch (ValidatorException ex)
             {
-                ex.Errors.Count.Should().Be(2);
+                ex.Errors.Count.Should().Be(4);
 
                 ex.Errors.Should().Contain(x => x.Message == "Nome do Colega é Obrigatório!");
                 ex.Errors.Should().Contain(x => x.Message == "Descrição do Endereço é Obrigatória!");
+                ex.Errors.Should().Contain(x => x.Message == "E-Mail do Colega é Obrigatório!");
+                ex.Errors.Should().Contain(x => x.Message == "Senha é Obrigatória!");
 
                 foreach (var error in ex.Errors)
                     Console.WriteLine(error.Message);
@@ -63,6 +67,8 @@ namespace Univem.Churras.Tests.Services
                 var colega = new Colega
                 {
                     Nome = "01234567890123456789012345678901234567890123456789X",
+                    Email = "teste",
+                    Senha = "123",
                     Endereco = new Endereco
                     {
                         Descricao = "Teste 123"
@@ -88,6 +94,8 @@ namespace Univem.Churras.Tests.Services
             var colega = new Colega
             {
                 Nome = "Tião",
+                Email = "tiao",
+                Senha = "123",
                 Endereco = new Endereco
                 {
                     Descricao = "Teste 123"
@@ -135,6 +143,160 @@ namespace Univem.Churras.Tests.Services
             fromDb.Count.Should().BeGreaterThan(1);
             foreach(var x in fromDb)
                 Console.WriteLine(x);
+        }
+
+        [TestMethod]
+        public async Task Senha_Crypto_Test()
+        {
+            var colega = new Colega
+            {
+                Nome = "Tião",
+                Email = "tiao",
+                Senha = "123",
+                Endereco = new Endereco
+                {
+                    Descricao = "Teste 123"
+                }
+            };
+            await _service.Insert(colega);
+
+            var senhaCrypto = CryptoHelper.ComputeHashMd5("123");
+
+            colega.Senha.Should().Be(senhaCrypto);
+            Console.WriteLine(colega.Senha);
+        }
+
+        [TestMethod]
+        public async Task Senha_Update_Test()
+        {
+            var colega = new Colega
+            {
+                Nome = "Tião",
+                Email = "tiao",
+                Senha = "123",
+                Endereco = new Endereco
+                {
+                    Descricao = "Teste 123"
+                }
+            };
+            await _service.Insert(colega);
+
+            colega.Senha = "XXXXXX";
+            await _service.Update(colega);
+
+            var senhaCrypto = CryptoHelper.ComputeHashMd5("123");
+            colega.Senha.Should().Be(senhaCrypto);
+
+            Console.WriteLine(colega.Senha);
+        }
+
+        [TestMethod]
+        public async Task Login_Ok_Test()
+        {
+            var loginRequest = new LoginRequest
+            {
+                Email = "colega1",
+                Senha = "123"
+            };
+
+            var token = await _service.Login(loginRequest);
+
+            token.Should().NotBeNull();
+            Console.WriteLine(token.Name);
+        }
+
+        [TestMethod]
+        public async Task Login_SenhaErrada_Test()
+        {
+            try
+            {
+                var loginRequest = new LoginRequest
+                {
+                    Email = "colega1",
+                    Senha = "XXXXXXX"
+                };
+
+                var token = await _service.Login(loginRequest);
+
+                Assert.Fail();
+            }
+            catch (ValidatorException ex)
+            {
+                ex.Errors.Should().Contain(x => x.Message == "Login Inválido!");
+            }
+        }
+
+        [TestMethod]
+        public async Task Login_EmailErrado_Test()
+        {
+            try
+            {
+                var loginRequest = new LoginRequest
+                {
+                    Email = "colega1XYZ",
+                    Senha = "123"
+                };
+
+                var token = await _service.Login(loginRequest);
+
+                Assert.Fail();
+            }
+            catch (ValidatorException ex)
+            {
+                ex.Errors.Should().Contain(x => x.Message == "Login Inválido!");
+            }
+        }
+
+        [TestMethod]
+        public async Task Login_Required_Test()
+        {
+            try
+            {
+                var loginRequest = new LoginRequest();
+
+                var token = await _service.Login(loginRequest);
+
+                Assert.Fail();
+            }
+            catch (ValidatorException ex)
+            {
+                ex.Errors.Count.Should().Be(2);
+                ex.Errors.Should().Contain(x => x.Message == "Email é obrigatório");
+                ex.Errors.Should().Contain(x => x.Message == "Senha inválida");
+
+                foreach(var error in ex.Errors)
+                    Console.WriteLine(error.Message);
+            }
+        }
+
+        [TestMethod]
+        public async Task TrocaSenha_Test()
+        {
+            var colega = new Colega
+            {
+                Nome = "Colega para troca de senha",
+                Email = "trocaSenha@email",
+                Senha = "123",
+                Endereco = new Endereco
+                {
+                    Descricao = "Teste 123"
+                }
+            };
+            await _service.Insert(colega);
+
+            var trocaSenhaRequest = new TrocaSenhaRequest
+            {
+                Email = "trocaSenha@email",
+                SenhaAntiga = "123",
+                SenhaNova = "321",
+                SenhaNovaConfirma = "321"
+            };
+
+            await _service.TrocaSenha(trocaSenhaRequest);
+
+            var senhaHash = CryptoHelper.ComputeHashMd5("321");
+            var fromDb = await _service.Get(colega.Key);
+            fromDb.Senha.Should().Be(senhaHash);
         }
     }
 }

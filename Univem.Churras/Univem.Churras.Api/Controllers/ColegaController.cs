@@ -3,12 +3,14 @@ using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Univem.Churras.Api.Attributes;
 using Univem.Churras.Domain.Model.Entities;
 using Univem.Churras.Domain.Services;
 
 namespace Univem.Churras.Api.Controllers
 {
     [ApiController]
+    [ChurrasAuthorize]
     [Route("[controller]")]
     public class ColegaController : ControllerBase
     {
