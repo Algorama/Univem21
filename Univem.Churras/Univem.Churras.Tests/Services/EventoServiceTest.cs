@@ -164,13 +164,17 @@ namespace Univem.Churras.Tests.Services
         [TestMethod]
         public async Task List_Eventos_Futuros_Test()
         {
-            // Existe um Bug no EFCore 5, que lança exception se usar a seguinte expression:
+            // TODO: Refatorar quando migrar para .net6.0
+            // Existe um Bug no EFCore 5, que lança exception se usar a
+            // seguinte expression:
             //      x => x.Dia > DateTime.Today
-            // A explicação do problema está aqui: https://github.com/dotnet/efcore/issues/18589
-            // Foi corrigido para a versão 6
+            // A explicação do problema está aqui:
+            // https://github.com/dotnet/efcore/issues/18589
+            // Foi corrigido para a versão 6, mas por enquanto
+            // basta fazer assim:
             var today = DateTime.Today;
             var fromDb = await _service.List(x => x.Dia > today);
-            //
+            ////////////////////////////////////////////////////////
 
             fromDb.Count.Should().BeGreaterThan(1);
             foreach (var x in fromDb)

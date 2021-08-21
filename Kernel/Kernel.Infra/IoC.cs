@@ -33,7 +33,7 @@ namespace Kernel.Infra
             RegisterRepository<TDbContext>();
         }
 
-        private static void InitializeContainer()
+        public static void InitializeContainer()
         {
             if (Container == null)
             {
@@ -69,7 +69,7 @@ namespace Kernel.Infra
             Container.Register<IEmailService, EmailService>();
             Container.Register<IBlobStorage, AzureBlobStorage>();
 
-            if(context == Context.IntegratedTest || context == Context.UnitTest)
+            if(context == Context.IntegratedTest || context == Context.UnitTest || context == Context.Development)
                 Container.Register<IUserProvider, MockUserProvider>();
         }
 

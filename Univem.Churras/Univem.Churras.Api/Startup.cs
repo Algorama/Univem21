@@ -1,15 +1,13 @@
+using Kernel.Infra;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using Microsoft.OpenApi.Models;
+using SimpleInjector;
+using Univem.Churras.Infra;
 
 namespace Univem.Churras.Api
 {
@@ -22,31 +20,61 @@ namespace Univem.Churras.Api
 
         public IConfiguration Configuration { get; }
 
-        // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-
             services.AddControllers();
+
+            #region Injeção de Dependência
+
+            IoC.InitializeContainer();
+            services.AddSimpleInjector(IoC.Container, options =>
+            {
+                options.AddAspNetCore().AddControllerActivation();
+            });
+            IoC.Start<ChurrasContext>();
+
+            #endregion
+
+            #region Swagger
+
+            services.AddMvc();
+            services.AddSwaggerGen(x =>
+            {
+                x.SwaggerDoc("v1", new OpenApiInfo { Title = "Churras API", Version = "v1" });
+            });
+
+            #endregion
+
+            services.Configure<ApiBehaviorOptions>(options =>
+            {
+                options.SuppressModelStateInvalidFilter = true;
+            });
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            app.UseSimpleInjector(IoC.Container);
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
             }
 
             app.UseHttpsRedirection();
-
             app.UseRouting();
-
-            app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
             });
+
+            #region Swagger
+            app.UseSwagger();
+            app.UseSwaggerUI(x =>
+            {
+                x.SwaggerEndpoint("v1/swagger.json", "Churras API v1");
+            });
+            #endregion
         }
     }
 }

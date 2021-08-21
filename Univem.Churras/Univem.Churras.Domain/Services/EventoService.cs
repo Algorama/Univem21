@@ -30,11 +30,29 @@ namespace Univem.Churras.Domain.Services
                 var repoColega = session.GetRepository<Colega>();
 
                 entity.Key = await GetNextSequence(session);
-
                 entity.DonoDaCasa = await repoColega.Get(token.Key);
 
                 await repo.Insert(entity);
                 session.SaveChanges();
+            }
+        }
+
+        public async override Task<Evento> Get(object key)
+        {
+            if (key == null)
+                return new Evento();
+
+            using (var session = SessionFactory.OpenSession())
+            {
+                var repo = session.GetQueryRepository<Evento>();
+                var repoColega = session.GetQueryRepository<Colega>();
+
+                var evento = await repo.Get(key);
+                if (evento == null)
+                    return null;
+
+                evento.DonoDaCasa = await repoColega.Get(evento.DonoDaCasaKey);
+                return evento;
             }
         }
 
