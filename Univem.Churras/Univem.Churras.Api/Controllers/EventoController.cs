@@ -10,7 +10,7 @@ using Univem.Churras.Domain.Services;
 namespace Univem.Churras.Api.Controllers
 {
     [ApiController]
-    [ChurrasAuthorize]
+    //[ChurrasAuthorize]
     [Route("[controller]")]
     public class EventoController : ControllerBase
     {

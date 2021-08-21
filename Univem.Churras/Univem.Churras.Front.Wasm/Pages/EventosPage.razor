@@ -1,0 +1,42 @@
+﻿@page "/eventos"
+@inject HttpClient Http
+
+<h1>Churras da Firma</h1>
+
+<p>Próximos eventos:</p>
+
+@if (eventos == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Data</th>
+                <th>Evento</th>
+                <th>Tipo</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var evento in eventos)
+            {
+                <tr>
+                    <td>@evento.Dia.ToString("dd/MM/yyyy")</td>
+                    <td>@evento.Nome</td>
+                    <td>@evento.Tipo</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    private Evento[] eventos;
+
+    protected override async Task OnInitializedAsync()
+    {
+        eventos = await Http.GetFromJsonAsync<Evento[]>("evento");
+    }
+}
