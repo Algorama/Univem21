@@ -4,11 +4,10 @@ namespace Kernel.Domain.Model.Dtos
 {
     public class LoginRequest
     {
-        [Required(AllowEmptyStrings = false, ErrorMessage = "Email é obrigatório")]
-        [EmailAddress(ErrorMessage = "Formato do E-Mail inválido!")]
-        public string Email { get; set; } = string.Empty;
+        [Required(ErrorMessage = "Email é obrigatório")]
+        public string Email { get; set; }
 
-        [Required(AllowEmptyStrings = false, ErrorMessage = "Senha inválida")]
-        public string Password { get; set; }
+        [Required(ErrorMessage = "Senha inválida")]
+        public string Senha { get; set; }
     }
 }
